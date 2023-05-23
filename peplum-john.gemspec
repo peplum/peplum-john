@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Tasos Laskos"]
   spec.email = ["tasos.laskos@ecsypno.com"]
 
-  spec.summary = "Peplum john project."
-  spec.description = "Peplum john project."
+  spec.summary = "Peplum-powered John the Ripper."
+  spec.description = "A distributed approach to the John the Ripper password recovery tool"
   spec.homepage = "http://ecsypno.com/"
   spec.required_ruby_version = ">= 2.6.0"
 

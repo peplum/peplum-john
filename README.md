@@ -10,7 +10,7 @@
 
 ## Usage
 
-See the [examples/](https://github.com/peplum/john/blob/master/examples/) directory.
+See the [examples/](https://github.com/peplum/peplum-john/tree/master/examples) directory.
 
 ### Grid
 
@@ -52,10 +52,10 @@ The cool thing is that it doesn't matter to which you refer for _Instance_ _spaw
 be the one providing it.
 
 You can then configure the _REST_ service to use any of those 2 _Agents_ and perform your operation --
-see [examples/rest.rb](https://github.com/peplum/john/blob/master/examples/rest.rb).
+see [examples/rest.rb](https://github.com/peplum/peplum-john/blob/master/examples/rest.rb).
 
 The _REST_ service is good for integration, so it's your safe bet; you can however also take advantage of the internal
-_RPC_ protocol and opt for something more like [examples/rpc.rb](https://github.com/peplum/john/blob/master/examples/rpc.rb).
+_RPC_ protocol and opt for something more like [examples/rpc.rb](https://github.com/peplum/peplum-john/blob/master/examples/rpc.rb).
 
 ## Contributing
 

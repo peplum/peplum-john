@@ -11,6 +11,9 @@ module Payload
   HASHES_FILE = "hashes.#{Process.pid}.txt"
   at_exit { FileUtils.rm_f HASHES_FILE }
 
+  POT_FILE = "hashes.#{Process.pid}.pot"
+  at_exit { FileUtils.rm_f POT_FILE }
+
   JOHN = 'john-the-ripper'
 
   FORMATS = Set.new(%w(descrypt bsdicrypt md5crypt md5crypt-long bcrypt scrypt LM AFS
@@ -101,7 +104,9 @@ module Payload
   # @param  [Array] data  Report data from workers.
   # @abstract
   def merge( data )
-    data
+    f = data.pop
+    data.each { |d| f.merge! d }
+    f
   end
 
   private
@@ -114,12 +119,16 @@ module Payload
   end
 
   def _run( options )
-    `#{executable} --no-log --format=#{options['format']} #{HASHES_FILE} `
-    output = `#{executable} --show --format=#{options['format']} #{HASHES_FILE}`
-    output.lines.map do |line|
-      next if !line.start_with? '?:'
-      line[2..-1].strip
-    end.compact
+    `#{executable} --no-log --pot=#{POT_FILE} --format=#{options['format']} #{HASHES_FILE} 2> /dev/null`
+    `#{executable} --format=#{options['format']} #{HASHES_FILE} 2> /dev/null`
+
+    results = {}
+    File.open( POT_FILE , 'r' ) do |f|
+      line = f.readline
+      hash, password = line.split( '$' ).last.split( ':' )
+      results[hash] = password.strip
+    end
+    results
   end
 
   def validate( options )

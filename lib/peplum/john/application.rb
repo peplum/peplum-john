@@ -11,6 +11,12 @@ class Application < Peplum::Application
   provision_memory 100 * 1024 * 1024
   provision_disk   100 * 1024 * 1024
 
+  require_relative "application/services/info"
+  instance_service_for :info, Services::Info
+
+  require_relative "application/services/rest_proxy"
+  rest_service_for :info, Services::RESTProxy
+
   def payload
     Payload
   end

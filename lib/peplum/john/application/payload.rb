@@ -8,10 +8,10 @@ class Application
 module Payload
 
   # For some reason doesn't work when specifying sane directories.
-  HASHES_FILE = "hashes.#{Process.pid}.txt"
+  HASHES_FILE = "hashes.#{rand(99999)}.#{Process.pid}.txt"
   at_exit { FileUtils.rm_f HASHES_FILE }
 
-  POT_FILE = "hashes.#{Process.pid}.pot"
+  POT_FILE = "hashes.#{rand(99999)}.#{Process.pid}.pot"
   at_exit { FileUtils.rm_f POT_FILE }
 
   JOHN = 'john-the-ripper'
@@ -85,7 +85,9 @@ module Payload
       end
     end
 
-    _run options
+    r = _run( options )
+    John::Application.master.info.update r
+    r
   end
 
   # Distribute `objects` into `chunks` amount of groups, one for each worker.
@@ -119,15 +121,23 @@ module Payload
   end
 
   def _run( options )
-    `#{executable} --no-log --pot=#{POT_FILE} --format=#{options['format']} #{HASHES_FILE} 2> /dev/null`
-    `#{executable} --format=#{options['format']} #{HASHES_FILE} 2> /dev/null`
+    `#{executable} --no-log --session=#{Process.pid} --pot=#{POT_FILE} --format=#{options['format']} #{HASHES_FILE} 2> /dev/null`
+    self.report
+  end
 
+  def report
     results = {}
+
+    return results if !File.exists? POT_FILE
+
     File.open( POT_FILE , 'r' ) do |f|
-      line = f.readline
-      hash, password = line.split( '$' ).last.split( ':' )
-      results[hash] = password.strip
+      while !f.eof?
+        line = f.readline
+        hash, password = line.split( '$' ).last.split( ':' )
+        results[hash] = password.strip
+      end
     end
+
     results
   end
 

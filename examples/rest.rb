@@ -28,8 +28,10 @@ request :post, 'instances', {
     objects:     %w(
       6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090
       36f583dd16f4e1e201eb1e6f6d8e35a2ccb3bbe2658de46b4ffae7b0e9ed872e
+      c6b3e5102f268d17a60562720abeb625b0d3398289f46f51861f1bab3055e89d
+      b962ac55407c25c159c4c9f3764145e1ecc9ae6a37cf376e8bc98d31633e9a61
     ),
-    max_workers: 2
+    max_workers: 4
   },
   payload: {
     format: 'raw-sha256'
@@ -40,6 +42,9 @@ request :post, 'instances', {
 instance_id = response_data['id']
 
 while sleep( 1 )
+  request :get, "instances/#{instance_id}/info/progress"
+  ap response_data
+
   # Continue looping while instance status is 'busy'.
   request :get, "instances/#{instance_id}"
   break if !response_data['busy']

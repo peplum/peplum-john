@@ -4,9 +4,15 @@
 
 ## Installation
 
+### Source
+
     $ git clone https://github.com/peplum/peplum-john.git
     $ cd peplum-john
     $ bundle install
+
+### Gem
+
+    $ gem install peplum-john
 
 ## Usage
 

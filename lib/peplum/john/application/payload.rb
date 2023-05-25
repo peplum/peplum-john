@@ -6,6 +6,7 @@ class John
 class Application
 
 module Payload
+  include Peplum::Application::Payload
 
   # For some reason doesn't work when specifying sane directories.
   HASHES_FILE = "hashes.#{rand(99999)}.#{Process.pid}.txt"
@@ -88,26 +89,6 @@ module Payload
     r = _run( options )
     John::Application.master.info.update r
     r
-  end
-
-  # Distribute `objects` into `chunks` amount of groups, one for each worker.
-  #
-  # @param  [Array] objects All objects that need to be processed.
-  # @param  [Integer] chunks  Amount of object groups that should be generated.
-  #
-  # @return [Array<Array<Object>>]  `objects` split in `chunks` amount of groups
-  def split( objects, chunks )
-    objects.chunk chunks
-  end
-
-  # Merge result `data` for reporting.
-  #
-  # @param  [Array] data  Report data from workers.
-  # @abstract
-  def merge( data )
-    f = data.pop
-    data.each { |d| f.merge! d }
-    f
   end
 
   private

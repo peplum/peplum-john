@@ -96,8 +96,7 @@ module Payload
   # @param  [Integer] chunks  Amount of object groups that should be generated.
   #
   # @return [Array<Array<Object>>]  `objects` split in `chunks` amount of groups
-  # @abstract
-  def group( objects, chunks )
+  def split( objects, chunks )
     objects.chunk chunks
   end
 
